@@ -1,57 +1,56 @@
 package aplication;
 
-import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-import entities.Address;
-import entities.Department;
-import entities.Employee;
+import entities.Lesson;
+import entities.Task;
+import entities.Video;
 
 public class Program {
 
-	public static void main(String[] args) throws ParseException {
-		// TODO Auto-generated method stub
+	public static void main(String[] args) {
 		Locale.setDefault(Locale.US);
-		Scanner sc = new Scanner (System.in);
+		Scanner sc = new Scanner(System.in);
+		List<Lesson> list = new ArrayList<>();
 		
-		System.out.print("Nome do departamento: ");
-		String deptName = sc.nextLine();
-		System.out.print("Dia do pagamento: ");
-		int payDayDept = sc.nextInt();
-		sc.nextLine();
-		System.out.print("Email: ");
-		String emailAddress = sc.nextLine();		
-		System.out.print("Telefone: ");
-		String phoneAdrress = sc.nextLine();
-		
-		Address adress = new Address(emailAddress, phoneAdrress);
-		
-		Department dept = new Department(deptName,payDayDept,adress);
-		
-		System.out.print("Quantos funcionários tem o departamento? ");
+		System.out.print("Quantas aulas tem o curso? ");
 		int n = sc.nextInt();
-		sc.nextLine();
-		for(int i = 1; i<=n;i++) {			
-			System.out.println("Dados do funcionários " + i + ":");
-			System.out.print("Nome: ");
-			String nameEmployee = sc.nextLine();
-			System.out.print("Salário: ");
-			double salary = sc.nextDouble();
+		
+		for(int i = 1; i<=n; i++) {
+			System.out.println("\nDados da " + i +"ª aula:");
+			System.out.print("Conteúdo ou tarefa (c/t)? ");
+			char ch = sc.next().charAt(0);
 			sc.nextLine();
-			Employee employee = new Employee(nameEmployee, salary);
+			System.out.print("Título: ");
+			String title = sc.nextLine();
 			
-			dept.addEmployee(employee);
+			if(ch == 'c') {
+				System.out.print("URL do vídeo: ");
+				String url = sc.nextLine();
+				System.out.print("Duração em segundos: ");
+				int seconds = sc.nextInt();
+				list.add(new Video(title, url, seconds));
+				
+			}
+			else {
+				System.out.print("Descrição: ");
+				String description = sc.nextLine();
+				System.out.print("Quantidade de questões: ");
+				int questionCount = sc.nextInt();
+				list.add(new Task(title, description, questionCount));
+			}
 		}
 		
-		showReport(dept);
-		
+		int valueTotal = 0;
+		for(Lesson lesson : list) {
+			valueTotal += lesson.duration();
+		}
+		System.out.println("\nDURAÇÃO TOTAL DO CURSO = " + valueTotal + " segundos");
 		sc.close();
 
-	}
-	
-	private static void showReport(Department dept) {
-		System.out.println(dept.toString());
 	}
 
 }
